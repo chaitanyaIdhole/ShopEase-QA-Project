@@ -25,7 +25,28 @@ def driver(request):
         print(f"\nFailed test: {request.node.nodeid}")
         print(f"Current URL: {browser.current_url}")
         print(f"Page title: {browser.title}")
-        print(f"Page source preview:\n{browser.page_source[:3000]}")
+        print("PAGE TEXT:", browser.find_element("tag name", "body").text[:5000])
+
+        print("INPUTS:", browser.execute_script("""
+            return Array.from(document.querySelectorAll("input")).map(
+                e => ({
+                    id: e.id,
+                    name: e.name,
+                    placeholder: e.placeholder,
+                    type: e.type
+                })
+            )
+        """))
+
+        print("BUTTONS:", browser.execute_script("""
+            return Array.from(document.querySelectorAll("button")).map(
+                e => ({
+                    id: e.id,
+                    text: e.innerText,
+                    dataTest: e.getAttribute("data-test")
+                })
+            )
+        """))
 
         screenshot = os.path.join(
             "reports",
