@@ -1,0 +1,9 @@
+Test Case ID,Scenario ID,Title,Preconditions,Test Data,Steps,Expected Result,Actual Result,Status,Evidence/Notes
+TC01,TS01,Login with valid credentials,Login page open,Public demo username and password,"1. Enter valid demo credentials; 2. Click Login",Inventory page opens,,Not Run,
+TC02,TS02,Login with invalid password,Login page open,Valid demo username + deliberately incorrect password,"1. Enter username; 2. Enter incorrect password; 3. Click Login",Access is denied and an error appears,,Not Run,
+TC03,TS03,Add product to cart,Logged in on inventory page,One listed product,"1. Click Add to cart; 2. Open cart",Selected product appears in cart,,Not Run,
+TC04,TS04,Remove product from cart,Logged in with one item in cart,Existing cart item,"1. Open cart; 2. Click Remove",Product is removed from cart,,Not Run,
+TC05,TS05,Sort products by price low-to-high,Logged in on inventory page,Price low-to-high option,"1. Open sort dropdown; 2. Select Price (low to high); 3. Compare prices",Prices are in ascending order,,Not Run,
+TC06,TS06,Checkout with required fields empty,Logged in with item in cart,None,"1. Open cart; 2. Click Checkout; 3. Leave required fields empty; 4. Click Continue",Progress is blocked and validation feedback appears,,Not Run,
+TC07,TS07,Complete checkout,Logged in with item in cart,Use non-personal demo data only,"1. Open cart; 2. Checkout; 3. Fill required fields; 4. Continue; 5. Finish",Order confirmation is displayed,,Not Run,
+TC08,TS08,Open product details,Logged in on inventory page,One listed product,"1. Click a product name or image",Correct product details are displayed,,Not Run,
