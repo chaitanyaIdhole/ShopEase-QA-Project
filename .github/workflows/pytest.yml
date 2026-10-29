@@ -34,9 +34,10 @@ jobs:
 
       - name: Prepare reports directory
         run: mkdir -p reports
-
+        
       - name: Run Selenium tests
-        run: python -m pytest --junitxml=reports/junit-results.xml
+        run: |
+          python -m pytest --tb=long --junitxml=reports/junit-results.xml
 
       - name: Upload test report
         if: always()
