@@ -46,9 +46,61 @@ def open_checkout_information_page(driver):
 
 
 
-def test_checkout_opens_information_page(driver):
-    open_checkout_information_page(driver)
-    assert "checkout-step-one" in driver.current_url
+def open_checkout_information_page(driver):
+    driver.get(BASE_URL)
+
+    wait = WebDriverWait(driver, 20)
+
+    wait.until(
+        EC.visibility_of_element_located((By.ID, "user-name"))
+    ).send_keys(USERNAME)
+
+    driver.find_element(By.ID, "password").send_keys(PASSWORD)
+    driver.find_element(By.ID, "login-button").click()
+
+    # Confirm that login reached the inventory page.
+    wait.until(EC.url_contains("inventory.html"))
+
+    wait.until(
+        EC.visibility_of_element_located(
+            (By.CLASS_NAME, "inventory_list")
+        )
+    )
+
+    # Add a product and verify the cart badge.
+    wait.until(
+        EC.element_to_be_clickable(
+            (By.ID, "add-to-cart-sauce-labs-backpack")
+        )
+    ).click()
+
+    wait.until(
+        EC.text_to_be_present_in_element(
+            (By.CLASS_NAME, "shopping_cart_badge"), "1"
+        )
+    )
+
+    # Open the cart.
+    wait.until(
+        EC.element_to_be_clickable(
+            (By.CLASS_NAME, "shopping_cart_link")
+        )
+    ).click()
+
+    wait.until(EC.url_contains("cart.html"))
+
+    # Click Checkout only after the cart page is ready.
+    wait.until(
+        EC.element_to_be_clickable((By.ID, "checkout"))
+    ).click()
+
+    # Confirm that the checkout form actually appears.
+    wait.until(EC.url_contains("checkout-step-one.html"))
+
+    wait.until(
+        EC.visibility_of_element_located((By.ID, "first-name"))
+    )
+
 
 
 def test_checkout_requires_first_name(driver):
