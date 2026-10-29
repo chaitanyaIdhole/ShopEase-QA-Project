@@ -2,6 +2,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 
 BASE_URL = "https://www.saucedemo.com/"
 USERNAME = "standard_user"
@@ -90,9 +91,15 @@ def open_checkout_information_page(driver):
     wait.until(EC.url_contains("cart.html"))
 
     # Click Checkout only after the cart page is ready.
-    wait.until(
+    
+    checkout_button = wait.until(
         EC.element_to_be_clickable((By.ID, "checkout"))
-    ).click()
+    )
+
+    ActionChains(driver) \
+        .move_to_element(checkout_button) \
+        .click() \
+        .perform()
 
     # Confirm that the checkout form actually appears.
     wait.until(EC.url_contains("checkout-step-one.html"))
