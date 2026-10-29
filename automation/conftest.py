@@ -1,12 +1,13 @@
 
+import os
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 
 @pytest.fixture
-def driver():
-    """Start Chrome for a test and always close it afterward."""
+def driver(request):
+    """Start Chrome and capture diagnostic details when a test fails."""
     options = Options()
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
@@ -16,7 +17,28 @@ def driver():
     browser = webdriver.Chrome(options=options)
     browser.implicitly_wait(0)
 
-    try:
-        yield browser
-    finally:
-        browser.quit()
+    yield browser
+
+    if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
+        os.makedirs("reports", exist_ok=True)
+
+        print(f"\nFailed test: {request.node.nodeid}")
+        print(f"Current URL: {browser.current_url}")
+        print(f"Page title: {browser.title}")
+        print(f"Page source preview:\n{browser.page_source[:3000]}")
+
+        screenshot = os.path.join(
+            "reports",
+            request.node.name + ".png"
+        )
+        browser.save_screenshot(screenshot)
+        print(f"Screenshot saved: {screenshot}")
+
+    browser.quit()
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+    setattr(item, f"rep_{report.when}", report)
