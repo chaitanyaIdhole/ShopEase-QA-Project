@@ -34,8 +34,7 @@ jobs:
 
       - name: Prepare reports directory
         run: mkdir -p reports
-        
-      
+
       - name: Run Selenium tests
         run: |
           python -m pytest --tb=long --junitxml=reports/junit-results.xml --html=reports/report.html --self-contained-html
@@ -45,8 +44,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: selenium-test-reports
-          path: |
-            reports/junit-results.xml
-            reports/report.html
+          path: reports/
           if-no-files-found: warn
-

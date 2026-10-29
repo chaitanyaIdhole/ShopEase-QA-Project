@@ -14,6 +14,11 @@ def driver(request):
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--window-size=1440,1000")
 
+    options.set_capability(
+    "goog:loggingPrefs",
+    {"browser": "ALL"}
+)
+
     browser = webdriver.Chrome(options=options)
     browser.implicitly_wait(0)
 
@@ -47,6 +52,10 @@ def driver(request):
                 })
             )
         """))
+
+        print("BROWSER CONSOLE LOGS:")
+        for entry in browser.get_log("browser"):
+            print(entry)
 
         screenshot = os.path.join(
             "reports",
